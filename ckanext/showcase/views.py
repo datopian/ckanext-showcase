@@ -66,6 +66,7 @@ def read(id):
 class EditView(dataset.EditView):
     def get(self, id, data=None, errors=None, error_summary=None):
         utils.check_new_view_auth()
+        tk.c.form_style = 'edit'
         return super(EditView, self).get(utils.DATASET_TYPE_NAME, id, data,
                                          errors, error_summary)
 
