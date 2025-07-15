@@ -63,6 +63,7 @@
         {% endif %}
         <h1>
             {% block page_heading %}
+                <span class="text-capitalize">[{{ pkg.showcase_type if pkg.showcase_type else "Showcase" }}]</span>
                 {{ name }}
                 {% if pkg.state.startswith('draft') %}
                     [{{ _('Draft') }}]

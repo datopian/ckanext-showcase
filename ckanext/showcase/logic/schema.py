@@ -28,6 +28,7 @@ package_name_validator = toolkit.get_validator("package_name_validator")
 tag_string_convert = toolkit.get_validator("tag_string_convert")
 ignore_not_package_admin = toolkit.get_validator("ignore_not_package_admin")
 url_validator = toolkit.get_validator("url_validator")
+default = toolkit.get_validator("default")
 
 
 def showcase_base_schema():
@@ -36,6 +37,7 @@ def showcase_base_schema():
         'revision_id': [ignore],
         'name': [not_empty, name_validator, package_name_validator],
         'title': [if_empty_same_as("name"), unicode_safe],
+        'showcase_type': [ignore_missing, not_empty, default("showcase"), toolkit.get_converter('convert_to_extras')],
         'author': [ignore_missing, unicode_safe],
         'author_email': [ignore_missing, unicode_safe],
         'notes': [ignore_missing, unicode_safe],
@@ -111,6 +113,8 @@ def showcase_show_schema():
     schema.update({
         'image_url': [toolkit.get_converter('convert_from_extras'),
                       toolkit.get_validator('ignore_missing')],
+        'showcase_type': [toolkit.get_converter('convert_from_extras'),
+                          toolkit.get_validator('ignore_missing')],
         'original_related_item_id': [
             toolkit.get_converter('convert_from_extras'),
             toolkit.get_validator('ignore_missing')]
