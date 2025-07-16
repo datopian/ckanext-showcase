@@ -8,7 +8,7 @@
 {% block subtitle %}{{ _("Showcases") }}{% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{{ h.nav_link(_('Showcases'), named_route=showcase_index_route, highlight_actions = 'new index') }}</li>
+  <li class="active">{{ h.nav_link(_('Showcases'), named_route=showcase_index_route) }}</li>
 {% endblock %}
 
 {% block page_primary_action %}
@@ -49,7 +49,7 @@
 <div class="filters">
   <div>
     {% for facet in c.facet_titles %}
-      {{ h.snippet('snippets/facet_list.html', title=c.facet_titles[facet], name=facet) }}
+      {{ h.snippet('snippets/facet_list.html', title=c.facet_titles[facet], name=facet, search_facets=search_facets) }}
     {% endfor %}
   </div>
   <a class="close no-text hide-filters"><i class="fa fa-times-circle icon-remove-sign"></i><span class="text">close</span></a>

@@ -27,6 +27,15 @@
         {{ form.prepend('name', id='field-name', label=_('URL'), prepend=prefix, placeholder=_('eg. my-showcase'), value=data.name, error=errors.name, attrs=attrs, is_required=true) }}
       {% endblock %}
 
+      {% block package_basic_fields_showcase_type %}
+        {% set showcase_type_options = [
+            {"value": "showcase", "text": "Showcase"},
+            {"value": "tool", "text": "Tool"},
+            {"value": "dashboard", "text": "Dashboard"}
+        ] %}
+        {{ form.select('showcase_type', id='field-showcase_type', is_required=True, label=_('Type'), options=showcase_type_options, selected=data.showcase_type if data.showcase_type else 'showcase', error=errors.showcase_type, attrs={'class': 'form-control'},  classes=['control-full']) }}
+      {% endblock %}
+
       {% block package_basic_fields_description %}
         {% set editor = h.showcase_get_wysiwyg_editor() %}
         {% if editor == 'ckeditor' %}

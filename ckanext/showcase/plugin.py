@@ -110,7 +110,7 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
         '''Only show tags for Showcase search list.'''
         if package_type != DATASET_TYPE_NAME:
             return facets_dict
-        return OrderedDict({'tags': _('Tags')})
+        return OrderedDict({'tags': _('Tags'), 'showcase_type': _('Type')})
 
     # IAuthFunctions
 
