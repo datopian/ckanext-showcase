@@ -37,6 +37,11 @@ def showcase_list(context, data_dict):
         .filter(model.Package.type == 'showcase') \
         .filter(model.Package.state == 'active')
 
+    showcase_type = data_dict.get("type")
+    if showcase_type:
+        q = q.filter(model.Package._extras.any(
+            key='showcase_type', value=showcase_type))
+
     showcase_list = []
     for pkg in q.all():
         showcase_list.append(model_dictize.package_dictize(pkg, context))
