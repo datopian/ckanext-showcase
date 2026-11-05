@@ -149,7 +149,11 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
 
         # Rendered notes
         if showcase_helpers.showcase_get_wysiwyg_editor() == 'ckeditor':
-            pkg_dict['showcase_notes_formatted'] = pkg_dict['notes']
+            # CKEditor stores HTML: clean it with CKAN's markdown allowlist
+            # before it is rendered as markup.
+            pkg_dict['showcase_notes_formatted'] = h.literal(h.bleach_clean(
+                pkg_dict['notes'] or '', strip=True,
+                tags=h.MARKDOWN_TAGS, attributes=h.MARKDOWN_ATTRIBUTES))
         else:
             pkg_dict['showcase_notes_formatted'] = \
                 h.render_markdown(pkg_dict['notes'])
