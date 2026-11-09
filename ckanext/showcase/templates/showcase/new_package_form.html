@@ -62,13 +62,18 @@
         {% set available_groups = h.groups_available() %}
         {% if available_groups %}
           {% set selected_groups = (data.groups or []) | map(attribute='name') | list %}
-          <fieldset class="form-group control-full">
-            <legend class="form-label">{{ _('Groups') }}</legend>
-            {% for group in available_groups %}
-              {{ form.checkbox('groups__' ~ loop.index0 ~ '__name', id='field-groups-' ~ loop.index0, label=group.display_name, value=group.name, checked=group.name in selected_groups) }}
-            {% endfor %}
+          <div class="form-group control-full">
+            <label class="form-label" for="field-groups">{{ _('Groups') }}</label>
+            <div class="controls">
+              {# Posted as group_names; the views turn it into groups. #}
+              <select id="field-groups" name="group_names" multiple data-module="autocomplete" data-placeholder="{{ _('Search groups') }}">
+                {% for group in available_groups %}
+                  <option value="{{ group.name }}" {{ 'selected' if group.name in selected_groups }}>{{ group.display_name }}</option>
+                {% endfor %}
+              </select>
+            </div>
             {{ form.info(_('The showcase is listed on the collection page of each selected group.')) }}
-          </fieldset>
+          </div>
         {% endif %}
       {% endblock %}
 

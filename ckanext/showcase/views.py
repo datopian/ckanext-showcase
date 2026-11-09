@@ -16,6 +16,15 @@ def index():
     return dataset.search(utils.DATASET_TYPE_NAME)
 
 
+def _groups_from_form(data_dict):
+    '''The form posts the selected group names as `group_names`, the showcase
+    actions take them as `groups`.'''
+    names = data_dict.pop('group_names', [])
+    if isinstance(names, str):
+        names = [names]
+    data_dict['groups'] = [{'name': name} for name in names if name]
+
+
 class CreateView(dataset.CreateView):
     def get(self, data=None, errors=None, error_summary=None):
         utils.check_new_view_auth()
@@ -32,6 +41,7 @@ class CreateView(dataset.CreateView):
                 dataset.dict_fns.unflatten(
                     dataset.tuplize_dict(dataset.parse_params(
                         tk.request.files)))))
+        _groups_from_form(data_dict)
         context = self._prepare()
         data_dict['type'] = utils.DATASET_TYPE_NAME
 
@@ -88,6 +98,7 @@ class EditView(dataset.EditView):
                     dataset.tuplize_dict(dataset.parse_params(
                         tk.request.files)))))
 
+        _groups_from_form(data_dict)
         data_dict['id'] = id
         try:
             pkg = tk.get_action('ckanext_showcase_update')(context, data_dict)
