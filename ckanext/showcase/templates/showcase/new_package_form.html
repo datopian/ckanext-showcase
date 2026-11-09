@@ -56,6 +56,22 @@
         {{ form.input('tag_string', id='field-tags', label=_('Tags'), placeholder=_('eg. economy, mental health, government'), value=data.tag_string, error=errors.tags, classes=['control-full'], attrs=tag_attrs) }}
       {% endblock %}
 
+      {% block package_basic_fields_groups %}
+        {# Only groups the user can manage are offered; memberships in other
+           groups are left untouched on save. #}
+        {% set available_groups = h.groups_available() %}
+        {% if available_groups %}
+          {% set selected_groups = (data.groups or []) | map(attribute='name') | list %}
+          <fieldset class="form-group control-full">
+            <legend class="form-label">{{ _('Groups') }}</legend>
+            {% for group in available_groups %}
+              {{ form.checkbox('groups__' ~ loop.index0 ~ '__name', id='field-groups-' ~ loop.index0, label=group.display_name, value=group.name, checked=group.name in selected_groups) }}
+            {% endfor %}
+            {{ form.info(_('The showcase is listed on the collection page of each selected group.')) }}
+          </fieldset>
+        {% endif %}
+      {% endblock %}
+
       {% set is_upload = data.image_url and not data.image_url.startswith('http') %}
       {% set is_url = data.image_url and data.image_url.startswith('http') %}
 
