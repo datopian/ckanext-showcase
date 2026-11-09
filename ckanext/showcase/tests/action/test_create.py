@@ -96,6 +96,36 @@ class TestCreateShowcase(object):
             == 1
         )
 
+    def test_showcase_create_and_update_groups(self):
+        """
+        Groups passed to showcase create and update are saved, returned by
+        showcase show and listed by showcase list.
+        """
+        sysadmin = factories.Sysadmin()
+        context = {"user": sysadmin["name"]}
+        first = factories.Group()
+        second = factories.Group()
+
+        showcase = helpers.call_action(
+            "ckanext_showcase_create",
+            context=context,
+            name="my-showcase",
+            groups=[{"name": first["name"]}],
+        )
+        shown = helpers.call_action("ckanext_showcase_show", id=showcase["id"])
+        assert [g["name"] for g in shown["groups"]] == [first["name"]]
+
+        helpers.call_action(
+            "ckanext_showcase_update",
+            context=context,
+            id=showcase["id"],
+            name="my-showcase",
+            image_url="",
+            groups=[{"name": second["name"]}],
+        )
+        listed = helpers.call_action("ckanext_showcase_list")
+        assert [g["name"] for g in listed[0]["groups"]] == [second["name"]]
+
 
 @pytest.mark.usefixtures("clean_db", "showcase_setup", "clean_session")
 class TestCreateShowcasePackageAssociation(object):

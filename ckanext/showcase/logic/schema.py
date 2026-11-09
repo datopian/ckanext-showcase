@@ -49,6 +49,11 @@ def showcase_base_schema():
         'resources': default_resource_schema(),
         'tags': default_tags_schema(),
         'tag_string': [ignore_missing, tag_string_convert],
+        'groups': {
+            'id': [ignore_missing, unicode_safe],
+            'name': [ignore_missing, unicode_safe],
+            '__extras': [ignore],
+        },
         'extras': default_extras_schema(),
         'save': [ignore],
         'return_to': [ignore],
@@ -87,7 +92,8 @@ def showcase_show_schema():
     schema['id'] = []
 
     schema.update({
-        'tags': {'__extras': [keep_extras]}})
+        'tags': {'__extras': [keep_extras]},
+        'groups': {'__extras': [keep_extras]}})
 
     schema.update({
         'state': [ignore_missing],
